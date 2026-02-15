@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>リアルタイム時計</title>
+
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #111;
+    font-family: monospace;
+}
+
+#clock {
+    font-size: 80px;
+    color: #00ff88;
+    letter-spacing: 3px;
+    text-shadow: 0 0 20px #00ff88;
+}
+</style>
+</head>
+
+<body>
+
+<div id="clock"></div>
+
+<script>
+const clock = document.getElementById("clock");
+
+function updateClock() {
+    const now = new Date();
+
+    const hours = String(now.getHours()).padStart(2, "0");
+    const minutes = String(now.getMinutes()).padStart(2, "0");
+    const seconds = String(now.getSeconds()).padStart(2, "0");
+    const milliseconds = String(now.getMilliseconds()).padStart(3, "0");
+
+    clock.textContent = `${hours}:${minutes}:${seconds}.${milliseconds}`;
+
+    requestAnimationFrame(updateClock);
+}
+
+updateClock();
+</script>
+
+</body>
+</html>
