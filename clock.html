@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>4段階背景リアルタイム時計</title>
+
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: monospace;
+    transition: background 1.5s ease;
+    color: white;
+}
+
+#date {
+    font-size: 40px;
+    margin-bottom: 20px;
+}
+
+#clock {
+    font-size: 80px;
+    letter-spacing: 3px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="date"></div>
+<div id="clock"></div>
+
+<script>
+const dateElement = document.getElementById("date");
+const clockElement = document.getElementById("clock");
+
+function updateClock() {
+    const now = new Date();
+
+    // 🇯🇵 日本時間（UTC+9）に変換
+    const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+    const jst = new Date(utc + (9 * 60 * 60 * 1000));
+
+    const year = jst.getFullYear();
+    const month = String(jst.getMonth() + 1).padStart(2, "0");
+    const day = String(jst.getDate()).padStart(2, "0");
+
+    const hours = jst.getHours();
+    const minutes = String(jst.getMinutes()).padStart(2, "0");
+    const seconds = String(jst.getSeconds()).padStart(2, "0");
+    const milliseconds = String(jst.getMilliseconds()).padStart(3, "0");
+
+    const weekdays = ["日", "月", "火", "水", "木", "金", "土"];
+    const weekday = weekdays[jst.getDay()];
+
+    dateElement.textContent = `${year}年${month}月${day}日 (${weekday})`;
+    clockElement.textContent =
+        `${String(hours).padStart(2,"0")}:${minutes}:${seconds}.${milliseconds} JST`;
+
+    // 🌈 背景切り替え（4段階）
+    if (hours >= 5 && hours < 11) {
+        // 🌅 朝
+        document.body.style.background =
+            "linear-gradient(to top, #ff9966, #ff5e62)";
+    } else if (hours >= 11 && hours < 17) {
+        // ☀ 昼
+        document.body.style.background =
+            "linear-gradient(to top, #56ccf2, #2f80ed)";
+    } else if (hours >= 17 && hours < 19) {
+        // 🌇 夕方
+        document.body.style.background =
+            "linear-gradient(to top, #f7971e, #ffd200)";
+    } else {
+        // 🌙 夜
+        document.body.style.background =
+            "linear-gradient(to top, #141e30, #243b55)";
+    }
+
+    requestAnimationFrame(updateClock);
+}
+
+updateClock();
+</script>
+
+</body>
+</html>
